@@ -1,0 +1,21 @@
+{
+  "name": "mayan-tx-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@certusone/wormhole-sdk": "^0.10.18",
+    "@metaplex-foundation/mpl-token-metadata": "^2.11.1",
+    "@mysten/sui": "^1.18.0",
+    "@solana/web3.js": "^1.98.0",
+    "ethers": "^5.6.4"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

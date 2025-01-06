@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+/dist
+
+# testing
+/coverage
+
+
+# misc
+/logs
+.DS_Store
+.idea
+.env
+.env.test
+.nyc_output
+yarn-debug.log*
+yarn-error.log*
