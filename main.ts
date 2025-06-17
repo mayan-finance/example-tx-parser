@@ -12,7 +12,7 @@ import { ethers } from 'ethers';
 import { forwarderAbi } from './abis/forwarder';
 import { MctpEvmRegistry } from './mctp';
 import { SwiftEvmRegistry } from './swift';
-import { MCTP_EVM, MCTP_V2_EVM, SWIFT_EVM, WH_EVM } from './utils/const';
+import { FAST_MCTP_EVM, MCTP_EVM, MCTP_V2_EVM, SWIFT_EVM, WH_EVM } from './utils/const';
 import { makeEvmProviders } from './utils/evm-providers';
 import { Swap } from './utils/swap.dto';
 import { getTokenDataGeneral } from './utils/token.util';
@@ -45,6 +45,7 @@ export class Parser {
 
 	private acceptedForwarderAddresses: Set<string> = new Set([
 		'0x0654874eb7F59C6f5b39931FC45dC45337c967c3',
+		'0x337685fdaB40D39bd02028545a4FfA7D287cC3E2',
 	]);
 
 	private allAvailableWhProtocols: Set<string> = new Set([
@@ -61,6 +62,11 @@ export class Parser {
 	private allAvailableSwiftProtocols: Set<string> = new Set([
 		SWIFT_EVM,
 		SWIFT_EVM.toLowerCase(),
+	]);
+
+	private allAvailableFastMctpProtocols: Set<string> = new Set([
+		FAST_MCTP_EVM,
+		FAST_MCTP_EVM.toLowerCase(),
 	]);
 
 	async processEventLog(
@@ -88,7 +94,7 @@ export class Parser {
 			forwarderV2log,
 		);
 
-		let extractedType: 'MCTP' | 'SWIFT' | 'WH';
+		let extractedType: 'MCTP' | 'SWIFT' | 'WH' | 'FAST_MCTP';
 		if (this.allAvailableMctpProtocols.has(innerParams.mayanProtocol)) {
 			extractedType = 'MCTP';
 		} else if (
@@ -99,6 +105,10 @@ export class Parser {
 			this.allAvailableWhProtocols.has(innerParams.mayanProtocol)
 		) {
 			extractedType = 'WH';
+		} else if (
+			this.allAvailableFastMctpProtocols.has(innerParams.mayanProtocol)
+		) {
+			extractedType = 'FAST_MCTP';
 		} else {
 			return null; // did not forward mctp/swift/wh related stuff (should not happen)
 		}
@@ -126,6 +136,9 @@ export class Parser {
 					txReceipt,
 					+chainId,
 				);
+				break;
+			case 'FAST_MCTP':
+				// TODO: add fast mctp
 				break;
 		}
 
