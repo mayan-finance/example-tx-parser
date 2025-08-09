@@ -1,0 +1,135 @@
+export type MctpPayloadWriter = {
+	address: 'DwMLtdtJqJQkHzNcrdTBuWHJByJfgpKBnvFvzyKdy3cU';
+	metadata: {
+		name: 'mctpPayloadWriter';
+		version: '0.1.0';
+		spec: '0.1.0';
+		description: 'Created with Anchor';
+	};
+	instructions: [
+		{
+			name: 'close';
+			discriminator: [98, 165, 201, 177, 108, 65, 206, 96];
+			accounts: [
+				{
+					name: 'payer';
+					writable: true;
+					signer: true;
+				},
+				{
+					name: 'payload';
+					writable: true;
+				},
+			];
+			args: [
+				{
+					name: 'nonce';
+					type: 'u16';
+				},
+			];
+		},
+		{
+			name: 'createSimple';
+			discriminator: [202, 39, 193, 48, 193, 201, 58, 114];
+			accounts: [
+				{
+					name: 'payer';
+					writable: true;
+					signer: true;
+				},
+				{
+					name: 'payload';
+					writable: true;
+				},
+				{
+					name: 'systemProgram';
+				},
+			];
+			args: [
+				{
+					name: 'nonce';
+					type: 'u16';
+				},
+				{
+					name: 'data';
+					type: 'bytes';
+				},
+			];
+		},
+	];
+	errors: [
+		{
+			code: 6000;
+			name: 'invalidPda';
+			msg: 'Invalid PDA for payload';
+		},
+	];
+};
+
+export const MctpPayloadWriterIdl: MctpPayloadWriter = {
+	address: 'DwMLtdtJqJQkHzNcrdTBuWHJByJfgpKBnvFvzyKdy3cU',
+	metadata: {
+		name: 'mctpPayloadWriter',
+		version: '0.1.0',
+		spec: '0.1.0',
+		description: 'Created with Anchor',
+	},
+	instructions: [
+		{
+			name: 'close',
+			discriminator: [98, 165, 201, 177, 108, 65, 206, 96],
+			accounts: [
+				{
+					name: 'payer',
+					writable: true,
+					signer: true,
+				},
+				{
+					name: 'payload',
+					writable: true,
+				},
+			],
+			args: [
+				{
+					name: 'nonce',
+					type: 'u16',
+				},
+			],
+		},
+		{
+			name: 'createSimple',
+			discriminator: [202, 39, 193, 48, 193, 201, 58, 114],
+			accounts: [
+				{
+					name: 'payer',
+					writable: true,
+					signer: true,
+				},
+				{
+					name: 'payload',
+					writable: true,
+				},
+				{
+					name: 'systemProgram',
+				},
+			],
+			args: [
+				{
+					name: 'nonce',
+					type: 'u16',
+				},
+				{
+					name: 'data',
+					type: 'bytes',
+				},
+			],
+		},
+	],
+	errors: [
+		{
+			code: 6000,
+			name: 'invalidPda',
+			msg: 'Invalid PDA for payload',
+		},
+	],
+};

@@ -288,7 +288,7 @@ export function getToken32bytesHexAddress(token: Token): string {
 
 export async function fetchErc20TokenData(chainId: number, tokenContract: string): Promise<Token> {
 	if (!evmProviders) {
-		evmProviders = makeEvmProviders(EvmChainIds);
+		evmProviders = makeEvmProviders(EvmChainIds as any);
 	}
 
 	const [symbol, decimals, permit] = await Promise.all([
@@ -398,7 +398,7 @@ const UsdcContracts: any = {
 	[CHAIN_ID_SUI]: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC',
 };
 
-export function getNativeUsdc(chainId: ChainId): Token {
+export function getNativeUsdc(chainId: number): Token {
 	return tokens[chainId].find((tk) => tk.contract === UsdcContracts[chainId])!;
 }
 

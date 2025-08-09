@@ -143,6 +143,9 @@ export class WhEvmRegistery {
 			swapSequence: decodedSwapLog.sequence.toString(),
 			deadline: new Date(+parsedSwapPayload.deadline.toString() * 1000),
 			sourceChain: chainId,
+			posAddress: decodedSwapLog.sender,
+			fromTokenChain: parsedTransferPayload.tokenChain,
+			toTokenChain: parsedSwapPayload.targetChain,
 			fromTokenAddress: realUint8ArrayToNative(
 				parsedTransferPayload.tokenAddress,
 				parsedTransferPayload.tokenChain,

@@ -12,8 +12,13 @@
     "@certusone/wormhole-sdk": "^0.10.18",
     "@metaplex-foundation/mpl-token-metadata": "^2.11.1",
     "@mysten/sui": "^1.18.0",
-    "@solana/web3.js": "^1.98.0",
-    "ethers": "^5.6.4"
+    "@solana/web3.js": "^1.98.4",
+    "base58-js": "^1.0.5",
+    "bs58": "^6.0.0",
+    "ethers": "^5.6.4",
+    "@coral-xyz/anchor": "^0.29.0",
+    "anchor30": "npm:@coral-xyz/anchor@^0.30.1"
+    
   },
   "devDependencies": {
     "dotenv": "^16.4.5"

@@ -64,3 +64,96 @@ type ParsedSwapPayload = {
 	referrer: Buffer;
 	gasDrop: bigint;
 };
+
+import {
+	getEmitterAddressEth as getEmitterAddressEthWh,
+	getEmitterAddressSolana as getEmitterAddressSolanaWh,
+	getSignedVAAWithRetry as getSignedVAAWithRetryWh,
+} from '@certusone/wormhole-sdk';
+
+import { Connection, PublicKey, SystemProgram, TransactionInstruction } from '@solana/web3.js';
+import axios from 'axios';
+import { CHAIN_ID_SONIC, CHAIN_ID_UNICHAIN } from './chain-map';
+
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+
+export function getWormholeSequenceFromPostedMessage(messageData: Buffer): bigint {
+	return messageData.readBigUInt64LE(49);
+}
+
+export async function getWormholePostedSequenceWithRetry(
+	solanaConnection: Connection,
+    messageAcc: PublicKey,
+    retries: number=20
+): Promise<bigint> {
+	let whMessageInfo = await solanaConnection.getAccountInfo(messageAcc);
+
+    let retryCount = retries;
+	while (retryCount-- > 0 && (!whMessageInfo || !whMessageInfo.data)) {
+		await delay(1500);
+		whMessageInfo = await solanaConnection.getAccountInfo(messageAcc);
+	}
+
+    if (!whMessageInfo || !whMessageInfo.data) {
+        throw new Error(`Could not get wormhole message info after ${retries} retries`);
+    }
+
+	return getWormholeSequenceFromPostedMessage(whMessageInfo.data);
+}
+
+export const getEmitterAddressEth = getEmitterAddressEthWh;
+export const getEmitterAddressSolana = getEmitterAddressSolanaWh;
+
+export async function getSignedVAAWithRetry(
+	hosts: string[], emitterChain: number,
+	emitterAddress: string, sequence: string,
+	extraGrpcOpts?: {}, retryTimeout?: number, retryAttempts?: number,
+): Promise<{
+	vaaBytes: Uint8Array;
+}> {
+	if ([CHAIN_ID_UNICHAIN, CHAIN_ID_SONIC].includes(emitterChain)) {
+		return {vaaBytes: await getSignedVaaFromWormholeScan(emitterChain, emitterAddress, sequence)};
+	}
+	return await getSignedVAAWithRetryWh(hosts, emitterChain as ChainId, emitterAddress, sequence, extraGrpcOpts, retryTimeout, retryAttempts);
+}
+
+async function getSignedVaaFromWormholeScan(
+	emitterChain: number,
+	emitterAddress: string,
+	sequence: string,
+): Promise<Uint8Array> {
+	const {data} = await axios.get(
+		`https://api.wormholescan.io/v1/signed_vaa/${emitterChain}/${emitterAddress}/${sequence}`,
+	);
+
+	if (data && data.vaaBytes) {
+		return new Uint8Array(Buffer.from(data.vaaBytes, 'base64'));
+	}
+
+	throw new Error(`Signed vaa not found for ${emitterChain}/${emitterAddress}/${sequence}`);
+}
+
+
+export async function getSequenceFromWormholeScan(txHash: string): Promise<string> {
+	let maxRetries = 20;
+	let retries = 0;
+	while (retries < maxRetries) {
+		try {
+			const { data } = await axios.get(`https://api.wormholescan.io/api/v1/operations?txHash=${txHash}`);
+
+			// {"operations":[{"id":"30/000000000000000000000000875d6d37ec55c8cf220b9e5080717549d8aa8eca/11207","emitterChain":30,"emitterAddress":{"hex":"000000000000000000000000875d6d37ec55c8cf220b9e5080717549d8aa8eca","native":"0x875d6d37ec55c8cf220b9e5080717549d8aa8eca"},"sequence":"11207","content":{"standarizedProperties":{"appIds":null,"fromChain":0,"fromAddress":"","toChain":0,"toAddress":"","tokenChain":0,"tokenAddress":"","amount":"","feeAddress":"","feeChain":0,"fee":"","normalizedDecimals":null}},"sourceChain":{"chainId":30,"timestamp":"2025-04-27T16:07:07Z","transaction":{"txHash":"0x4433652a68b62c1a045812bb2e8404eef229abf9fd2ccff0401f9c78eb49e02a"},"from":"0x13e71631684a90df4c2310f1ec78c3eda037b2eb","status":"confirmed"}}]}%
+			if (data && data.operations && data.operations.length > 0) {
+				return data.operations[0].sequence;
+			}
+		} catch (err) {
+			console.info(`Unable to fetch sequence from wormhole scan ${err}. Retrying... ${txHash}`);
+		} finally {
+			retries++;
+			await delay(1000 * retries);
+		}
+	}
+
+	throw new Error(`Sequence not found for ${txHash}`);
+}

@@ -29,8 +29,24 @@ export type Swap = {
 	gasDrop64: bigint;
 	orderHash?: string;
 	referrerBps?: number;
+	mayanBps?: number;
 	transferSequence?: string;
 	swapSequence?: string;
+	redeemSequence?: string;
+	refundSequence?: string;
+
+	fromTokenChain?: number;
+	toTokenChain?: number;
+	posAddress?: string;
+
+	stateAddr?: string;
+	stateNonce?: string;
+	auctionAddress?: string;
+
+	transferSignedVaa?: string;
+	swapSignedVaa?: string;
+	redeemSignedVaa?: string;
+	refundSignedVaa?: string;
 
 	payloadId?: number;
 	customPayload?: string;

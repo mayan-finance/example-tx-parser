@@ -9,14 +9,6 @@ export function tryHexToNativeStringGeneral(addrHex: string, destChain: ChainId)
     }
 }
 
-export function tryUint8ArrayToNativeGeneral(addrBytes: Uint8Array, destChain: ChainId) {
-    if (destChain === CHAIN_ID_SUI) {
-        return `0x${Buffer.from(addrBytes).toString('hex')}`;
-    } else {
-        return tryUint8ArrayToNative(addrBytes, destChain);
-    }
-}
-
 export function tryNativeToUint8ArrayGeneral(addr: string, destChain: ChainId) {
     if (destChain === CHAIN_ID_SUI) {
         return hexToUint8Array(addr);
@@ -30,5 +22,13 @@ export function tryNativeToHexStringGeneral(addr: string, destChain: ChainId) {
         return addr;
     } else {
         return tryNativeToHexString(addr, destChain);
+    }
+}
+
+export function tryUint8ArrayToNativeGeneral(addrBytes: Uint8Array, destChain: number) {
+    if (destChain === CHAIN_ID_SUI) {
+        return `0x${Buffer.from(addrBytes).toString('hex')}`;
+    } else {
+        return tryUint8ArrayToNative(addrBytes, destChain as ChainId);
     }
 }

@@ -8,7 +8,14 @@ export const MCTP_V2_SOLANA = 'dkpZqrxHFrhziEMQ931GLtfy11nFkCsfMftH9u6QwBU';
 export const MCTP_V2_AUCTION = 'A75HYyr5VG6zhwQ7HCeSPYmke4svHCPWCg4AqkHJw63e';
 export const FAST_MCTP_EVM = '0xC1062b7C5Dc8E4b1Df9F200fe360cDc0eD6e7741';
 
+export const SWIFT_SOLANA = 'BLZRi6frs4X4DNLw56V4EXai1b6QVESN1BhHBTYM9VcY';
+export const SWIFT_AUCTION = '9w1D9okTM8xNE7Ntb7LpaAaoLc6LfU9nHFs2h2KTpX1H';
+
+export const WH_SOLANA = 'FC4eXxkyrMPTjiYUpp4EAnkmwMbQyZ6NDCh1kfLn6vsf';
+
 export const SWIFT_EVM = '0xC38e4e6A15593f908255214653d3D947CA1c2338';
+
+export const HYPERCORE_DEPOSIT_PROCESSOR_ARB_CONTRACT = '0xdDd77e62C848C3334f1148d4F1457FC59ede4E4B';
 
 export const WH_EVM = [
     '0xF3f04555f8FdA510bfC77820FD6eB8446f59E72d',
@@ -26,3 +33,5 @@ export const WORMHOLE_TOKEN_BRIDGSE: any = {
     [CHAIN_ID_ETH]: '0x3ee18B2214AFF97000D974cf647E7C347E8fa585',
     [CHAIN_ID_BSC]: '0xB6F6D86a8f9879A9c87f643768d9efc38c1Da6E7',
 }
+
+export const WORMHOLE_GUARDIAN_RPCS="https://wormhole-v2-mainnet-api.chainlayer.network,https://wormhole-v2-mainnet-api.staking.fund,https://wormhole-v2-mainnet-api.chainlayer.network".split(',');

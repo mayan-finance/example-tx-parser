@@ -57,12 +57,37 @@ export const abi = [
 	},
 	{
 		inputs: [],
+		name: 'DomainAlreadySet',
+		type: 'error',
+	},
+	{
+		inputs: [],
+		name: 'DomainNotSet',
+		type: 'error',
+	},
+	{
+		inputs: [],
 		name: 'EmitterAlreadySet',
 		type: 'error',
 	},
 	{
 		inputs: [],
+		name: 'EthTransferFailed',
+		type: 'error',
+	},
+	{
+		inputs: [],
 		name: 'InvalidAction',
+		type: 'error',
+	},
+	{
+		inputs: [],
+		name: 'InvalidAddress',
+		type: 'error',
+	},
+	{
+		inputs: [],
+		name: 'InvalidAmountOut',
 		type: 'error',
 	},
 	{
@@ -112,7 +137,17 @@ export const abi = [
 	},
 	{
 		inputs: [],
+		name: 'InvalidProtocolFee',
+		type: 'error',
+	},
+	{
+		inputs: [],
 		name: 'InvalidRedeemFee',
+		type: 'error',
+	},
+	{
+		inputs: [],
+		name: 'InvalidReferrerFee',
 		type: 'error',
 	},
 	{
@@ -438,14 +473,15 @@ export const abi = [
 				name: 'params',
 				type: 'tuple',
 			},
-			{
-				internalType: 'uint32',
-				name: 'destDomain',
-				type: 'uint32',
-			},
 		],
 		name: 'createOrder',
-		outputs: [],
+		outputs: [
+			{
+				internalType: 'uint64',
+				name: 'sequence',
+				type: 'uint64',
+			},
+		],
 		stateMutability: 'payable',
 		type: 'function',
 	},
@@ -608,6 +644,25 @@ export const abi = [
 		name: 'fulfillOrder',
 		outputs: [],
 		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'uint16',
+				name: 'chainId',
+				type: 'uint16',
+			},
+		],
+		name: 'getDomain',
+		outputs: [
+			{
+				internalType: 'uint32',
+				name: 'domain',
+				type: 'uint32',
+			},
+		],
+		stateMutability: 'view',
 		type: 'function',
 	},
 	{
@@ -966,6 +1021,24 @@ export const abi = [
 			},
 		],
 		name: 'setConsistencyLevel',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'uint16',
+				name: 'chainId',
+				type: 'uint16',
+			},
+			{
+				internalType: 'uint32',
+				name: 'domain',
+				type: 'uint32',
+			},
+		],
+		name: 'setDomain',
 		outputs: [],
 		stateMutability: 'nonpayable',
 		type: 'function',
